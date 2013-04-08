@@ -184,12 +184,10 @@ function export_orders_list( $request )
       $payment->set_type( 'ls' );
       $payment_l = new Payment_L();
 
-      $bd = _get_debitnote_paymentdata( $order['oxuserid'] );
+      $bd = _get_debitnote_paymentdata($order['oxpaymentid']);
       $payment_l->set_kto( $bd['lsktonr'] );
       $payment_l->set_blz( $bd['lsblz'] );
       $payment_l->set_kto_inhaber( $bd['lsktoinhaber'] );
-
-      //mysql_query( "INSERT INTO error SET errstr='".mysql_escape_string( var_dump_string( $payment_l ) )."'" );
 
       $payment->set_ls( $payment_l );
     }
@@ -198,7 +196,7 @@ function export_orders_list( $request )
     //kundenerweiterung 71214
     if(false!=($hpprepaymentdata_tpl=act_have_table("oxhpprepaymentdata")?"oxhpprepaymentdata":(act_have_table("d3hpprepaymentdata")?"d3hpprepaymentdata":false)))
         {
-        $fact_res=res = act_db_query( "SELECT d3xmldata FROM `".$hpprepaymentdata_tpl."` WHERE `oxorderid`='".esc($order['oxid'])."' LIMIT 1" );
+        $fact_res = act_db_query( "SELECT d3xmldata FROM `".$hpprepaymentdata_tpl."` WHERE `oxorderid`='".esc($order['oxid'])."' LIMIT 1" );
         $hpTransaction = act_db_fetch_assoc($fact_res);
 
         if(is_array($hpTransaction))
